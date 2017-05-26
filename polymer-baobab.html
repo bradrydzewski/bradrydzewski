@@ -2,8 +2,7 @@
 <script>
 
 // binds the Element properties to the Baobab tree.
-function bind(tree, parent) {
-
+function bind(tree) {
   // watcher watches for branch changes.
   let watcher = null;
 
@@ -38,7 +37,8 @@ function bind(tree, parent) {
     return bindings;
   };
 
-  return class Tree extends parent {
+  return (parent) => class extends parent {
+  // return class Tree extends parent {
     constructor() {
       super();
     }
