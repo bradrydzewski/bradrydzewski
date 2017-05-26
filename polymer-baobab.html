@@ -1,0 +1,65 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<script>
+
+// binds the Element properties to the Baobab tree.
+function bind(tree, parent) {
+
+  // watcher watches for branch changes.
+  let watcher = null;
+
+  const bind = (element, bindings) => {
+    // populate existing values.
+    for (let [key, path] of Object.entries(bindings)) {
+      element.set(key, tree.get(path));
+    }
+
+    watcher = tree.watch(bindings);
+    watcher.on('update', function(e) {
+      const data = watcher.get();
+      Object.keys(data).forEach(key => {
+        element.set(key, data[key]);
+      });
+    });
+  }
+
+  const unbind = element => {
+    watcher.release();
+  };
+
+  const collect = (element) => {
+    const props = element['properties'];
+    let bindings = {};
+    Object.keys(props).forEach(function(prop) {
+      let path = props[prop]['path'];
+      if (path) {
+        bindings[prop] = path;
+      }
+    });
+    return bindings;
+  };
+
+  return class Tree extends parent {
+    constructor() {
+      super();
+    }
+
+    connectedCallback() {
+      super.connectedCallback();
+      const bindings = collect(this.constructor);
+      bind(this, bindings);
+    }
+
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      unbind(this);
+    }
+
+    dispatch(action, args) {
+      setTimeout(function() {
+        action(tree, args);
+      }, 0);
+    }
+  }
+}
+
+</script>

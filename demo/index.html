@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+
+    <title>polymer-baobab Demo</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../baobab/build/baobab.min.js"></script>
+    <link rel="import" href="../polymer-baobab.html">
+  </head>
+  <body>
+    <dom-module id="my-element">
+      <template>
+        <button on-click="handleShowEnglish">Show English</button>
+        <button on-click="handleShowFrench">Show French</button>
+        <button on-click="handleShowSpanish">Show Spanish</button>
+        <p>[[greeting]]</p>
+      </template>
+      <script>
+        class MyElement extends Polymer.Element {
+          static get is() { return 'my-element'; }
+          static get properties() {
+            return {
+              greeting: {
+                type: String,
+                path: 'greeting',
+              },
+            }
+          }
+          handleShowEnglish() {
+            this.dispatch((tree) => {
+              tree.set(['greeting'], 'Hello World');
+            });
+          }
+          handleShowFrench() {
+            this.dispatch((tree) => {
+              tree.set(['greeting'], 'Bonjour Monde');
+            });
+          }
+          handleShowSpanish() {
+            this.dispatch((tree) => {
+              tree.set(['greeting'], 'Hola Mundo');
+            });
+          }
+        }
+
+        const tree = new Baobab({
+          greeting: 'Hello'
+        })
+        window.customElements.define(MyElement.is, bind(tree, MyElement));
+      </script>
+    </dom-module>
+    <my-element></my-element>
+  </body>
+</html>
