@@ -25,7 +25,7 @@
         })
 
         // create a baobab mixin
-        const MyMixin = bind(tree)
+        const MyMixin = BaobabMixin(tree)
 
         class MyElement extends MyMixin(Polymer.Element) {
           static get is() { return 'my-element'; }
