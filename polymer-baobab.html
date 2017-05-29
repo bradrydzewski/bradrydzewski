@@ -3,8 +3,6 @@
 
 // binds the Element properties to the Baobab tree.
 function BaobabMixin(tree) {
-  // watcher watches for branch changes.
-  let watcher = null;
 
   const bind = (element, bindings) => {
     // populate existing values.
@@ -12,9 +10,9 @@ function BaobabMixin(tree) {
       element.set(key, tree.get(path));
     }
 
-    watcher = tree.watch(bindings);
-    watcher.on('update', function(e) {
-      const data = watcher.get();
+    element._watcher = tree.watch(bindings);
+    element._watcher.on('update', function(e) {
+      const data = element._watcher.get();
       Object.keys(data).forEach(key => {
         element.set(key, data[key]);
       });
@@ -22,7 +20,7 @@ function BaobabMixin(tree) {
   }
 
   const unbind = element => {
-    watcher.release();
+    element._watcher.release();
   };
 
   const collect = (element) => {
@@ -38,7 +36,6 @@ function BaobabMixin(tree) {
   };
 
   return (parent) => class extends parent {
-  // return class Tree extends parent {
     constructor() {
       super();
     }
